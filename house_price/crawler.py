@@ -39,8 +39,6 @@ def get_xiaoqulist(infile, outfile):
             print >> fo, 'xiaoqu_en,xiaoqu_cn,city_abbrev,city,province'
             try:
                 src = urllib2.urlopen('http://esf.%s.fang.com/housing/xiaoqu_%s.htm' % (abbr, x), timeout = 5)
-                if city == u'北京'.encode('utf8'):
-                    src = urllib2.urlopen('http://esf.fang.com/housing/xiaoqu_%s.htm' % x, timeout = 5)
                 page = src.read().decode('gbk')
                 soup = BeautifulSoup(page)
                 guide = soup(class_='guide')[0].text.encode('utf8')
