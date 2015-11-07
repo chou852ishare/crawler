@@ -25,41 +25,48 @@ def format_citylist(infile, outfile):
 def get_xiaoqulist(infile, outfile):
     fi  = open(infile, 'r')
     log = open('xiaoqu.log', 'w')
+    log.close()
     lines = fi.readlines()
     for line in lines[1:]:
         abbr = line.split(',')[0].encode('utf8')
-        city = line.split(',')[1].decode('gbk').encode('utf8')
-        fo   = open(outfile+'_'+abbr, 'w')
-        print >> fo, 'xiaoqu_en,xiaoqu_cn,city_abbrev,city,province'
+        city = line.split(',')[1]
         alph = 'ABCDEFG' + \
                'HIJKLMN' + \
                'OPQRST' + \
                'UVWXYZ'
         for x in alph:
+            fo = open(outfile+'_'+abbr+'_'+x, 'w')
+            print >> fo, 'xiaoqu_en,xiaoqu_cn,city_abbrev,city,province'
             try:
                 src  = urllib2.urlopen('http://esf.%s.fang.com/housing/xiaoqu_%s.htm' % (abbr, x), timeout = 5)
                 page = src.read().decode('gbk')
                 soup = BeautifulSoup(page)
-                guide = soup(class_='guide')[0].encode('utf8')
+                guide = soup(class_='guide')[0].text.encode('utf8')
                 if city not in guide:
                     continue
                 xiaoqu = soup(class_='busHsIndex')[0].find_all('a')
                 for xq in xiaoqu:
                     vill = xq.text.encode('utf8').strip()
                     href = xq['href']
+                    print city, x, vill
                     try:
                         site = get_site(abbr, vill, href) 
                         if site == '':
+                            log = open('xiaoqu.log', 'a')
                             print >> log, '%s,%s,%s,%s,%s,%s' % (abbr, city, x, vill, href, 'null_xiaoqu')
+                            log.close()
                         else:
                             print >> fo, vill + ',' + site
                     except:
+                        log = open('xiaoqu.log', 'a')
                         print >> log, '%s,%s,%s,%s,%s,%s' % (abbr, city, x, vill, href, 'fail_xiaoqu')
+                        log.close()
             except:
+                log = open('xiaoqu.log', 'a')
                 print >> log, '%s,%s,%s,%s' % (abbr, city, x, 'null')
-        fo.close()
+                log.close()
+            fo.close()
     fi.close()
-    log.close()
 
 
 def get_site(abbr, vill, href):
@@ -78,7 +85,7 @@ def get_site(abbr, vill, href):
 if __name__ == '__main__':
     cityhtml   = 'citylist_html'
     citylist   = 'citylist'
-    xiaoqulist = 'xiaoqulist'
-    format_citylist(cityhtml, citylist)
+    xiaoqulist = 'xiaoqu_list/xiaoqulist'
+    #format_citylist(cityhtml, citylist)
     get_xiaoqulist(citylist, xiaoqulist)
     
