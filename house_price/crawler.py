@@ -28,7 +28,7 @@ def get_xiaoqulist(infile, outfile):
     lines = fi.readlines()
     for line in lines[1:]:
         abbr = line.split(',')[0].encode('utf8')
-        city = line.split(',')[1].encode('utf8')
+        city = line.split(',')[1].decode('gbk').encode('utf8')
         fo   = open(outfile+'_'+abbr, 'w')
         print >> fo, 'xiaoqu_en,xiaoqu_cn,city_abbrev,city,province'
         alph = 'ABCDEFG' + \
