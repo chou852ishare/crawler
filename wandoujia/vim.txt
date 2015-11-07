@@ -1,0 +1,13 @@
+colorscheme desert
+syntax on
+set number
+filetype on
+set autoindent
+set smartindent
+set showmatch
+set vb t_vb=
+set ruler
+set cursorline
+
+set incsearch
+set guifont=Courier_new:h14:b:cDEFAULT
