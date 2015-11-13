@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 from datetime import datetime
+import time
 
 def get_allrank():
     driver = webdriver.PhantomJS('phantomjs')
@@ -10,12 +11,13 @@ def get_allrank():
         count = 0
         while loadmore == u'加载更多' and count < 10:
             driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+            time.sleep(0.5)
             loadmore = driver.find_element_by_class_name('load-more-btn').text
             count += 1
         dt = datetime.now().strftime('%Y%m%d_%H%M%S')
         fn = './html/allranking_%s.html' % dt
         f  = open(fn, 'w')
-        print >> f, driver.page_source.encode('utf8')
+        print >> f, driver.find_element_by_class_name('main').get_attribute('innerHTML').encode('utf8')
         f.close()
     except:
         log = open('./yingyongbao.log', 'a')
@@ -45,11 +47,12 @@ def get_categoryrank():
             count = 0
             while loadmore == u'加载更多' and count < 10:
                 driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+                time.sleep(0.5)
                 loadmore = driver.find_element_by_class_name('load-more-btn').text
                 count += 1
             dt = datetime.now().strftime('%Y%m%d_%H%M%S')
             f  = open('./html/%s_%s.html' % (c,dt), 'w')
-            print >> f, driver.page_source.encode('utf8')
+            print >> f, driver.find_element_by_class_name('main').get_attribute('innerHTML').encode('utf8')
             f.close()
         except:
             print >> log, dt, c, 'fail'
