@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 
 def get_allrank():
-    driver = webdriver.PhantomJS('phantomjs')
+    driver = webdriver.Firefox()
     try:
         driver.get('http://sj.qq.com/myapp/category.htm?orgame=2')
         loadmore = u'加载更多'
@@ -37,9 +37,9 @@ def get_categoryrank():
             146: 'juesebanyan',
             151: 'tiyujingsu',}
     log = open('yingyongbao.log', 'a')
+    driver = webdriver.Firefox()
     for cid in cate.keys():
         c = cate[cid]
-        driver = webdriver.PhantomJS('phantomjs')
         try:
             url = pref % cid
             driver.get(url)
@@ -56,7 +56,7 @@ def get_categoryrank():
             f.close()
         except:
             print >> log, dt, c, 'fail'
-        driver.quit()
+    driver.quit()
     log.close()
 
 
