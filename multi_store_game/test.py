@@ -1,5 +1,8 @@
 from selenium import webdriver
 from datetime import datetime
+import time
+
+time.sleep(15)
 
 d = webdriver.Firefox()
 d.get('http://www.baidu.com')
