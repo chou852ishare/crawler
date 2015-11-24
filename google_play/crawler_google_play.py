@@ -11,7 +11,7 @@ def crawl():
     n = 4
     p = Pool(n)
     for i in range(n):
-        p.apply_async(subtask, args=(applist[:20], n, i))
+        p.apply_async(subtask, args=(applist, n, i))
     p.close()
     p.join()
 
