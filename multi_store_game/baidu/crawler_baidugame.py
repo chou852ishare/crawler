@@ -18,14 +18,14 @@ def get_all_rank():
 
 def get_category_rank():
     pref = 'http://shouji.baidu.com/game/list?cid=%s&page_num=%s' 
-    cate = {1: 'xiuxianyizhi',
-            3: 'dongzuosheji',
-            5: 'tiyujingji',
-            8: 'jingyingyangcheng',
-            2: 'juesebanyan',
-            6: 'saichejingsu',
-            4: 'monifuzhu',
-            7: 'qipaizhuoyou'}
+    cate = {401: 'xiuxianyizhi',
+            403: 'dongzuosheji',
+            405: 'tiyujingji',
+            408: 'jingyingyangcheng',
+            402: 'juesebanyan',
+            406: 'saichejingsu',
+            404: 'monifuzhu',
+            407: 'qipaizhuoyou'}
     log = open('baidu.log', 'a')
     for cid in cate.keys():
         c = cate[cid]

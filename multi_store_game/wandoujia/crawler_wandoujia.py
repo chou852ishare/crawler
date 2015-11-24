@@ -5,7 +5,7 @@ import time
 import urllib
 
 def get_allrank():
-    driver = webdriver.PhantomJS('phantomjs')
+    driver = webdriver.Firefox()
     try:
         driver.get('http://www.wandoujia.com/top/game')
         loadmore = u'查看更多'
@@ -42,10 +42,10 @@ def get_categoryrank():
             '塔防守卫': 'tafangshouwei',
             '经营策略': 'jingyingcelue',}
     log = open('wandoujia.log', 'a')
+    driver = webdriver.Firefox()
     for cid in cate.keys():
         c = cate[cid]
         tag = urllib.quote(cid)
-        driver = webdriver.PhantomJS('phantomjs')
         try:
             dt  = datetime.now().strftime('%Y%m%d_%H%M%S')
             url = pref % tag
@@ -63,7 +63,7 @@ def get_categoryrank():
             f.close()
         except:
             print >> log, dt, c, 'fail'
-        driver.quit()
+    driver.quit()
     log.close()
 
 

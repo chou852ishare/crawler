@@ -4,14 +4,14 @@ from datetime import datetime
 import time
 
 def get_allrank():
-    driver = webdriver.PhantomJS('phantomjs')
+    driver = webdriver.Firefox()
     try:
         driver.get('http://sj.qq.com/myapp/category.htm?orgame=2')
         loadmore = u'加载更多'
         count = 0
         while loadmore == u'加载更多' and count < 10:
             driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-            time.sleep(0.2)
+            time.sleep(0.5)
             loadmore = driver.find_element_by_class_name('load-more-btn').text
             count += 1
         dt = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -37,9 +37,9 @@ def get_categoryrank():
             146: 'juesebanyan',
             151: 'tiyujingsu',}
     log = open('yingyongbao.log', 'a')
+    driver = webdriver.Firefox()
     for cid in cate.keys():
         c = cate[cid]
-        driver = webdriver.PhantomJS('phantomjs')
         try:
             url = pref % cid
             driver.get(url)
@@ -47,7 +47,7 @@ def get_categoryrank():
             count = 0
             while loadmore == u'加载更多' and count < 10:
                 driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-                time.sleep(0.2)
+                time.sleep(0.5)
                 loadmore = driver.find_element_by_class_name('load-more-btn').text
                 count += 1
             dt = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -56,7 +56,7 @@ def get_categoryrank():
             f.close()
         except:
             print >> log, dt, c, 'fail'
-        driver.quit()
+    driver.quit()
     log.close()
 
 
