@@ -23,7 +23,7 @@ storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        \
 
 
 def getRankFeature(date):
-    storeList = ['baidu']#, 'wandoujia'] #, 'xiaomi', 'yingyongbao', 'zhushou360']
+    storeList = ['baidu', 'wandoujia'] #, 'xiaomi', 'yingyongbao', 'zhushou360']
     for store in storeList:
         queryThisStore(store, date)
 
@@ -32,8 +32,7 @@ def queryThisStore(store, date):
     if store == 'baidu':
         extract = BaiduExtractor.extract
     elif store == 'wandoujia':
-        #extract = WandoujiaExtractor.extract
-        pass
+        extract = WandoujiaExtractor.extract
     elif store == 'xiaomi':
         #extract = XiaomiExtractor.extract
         pass

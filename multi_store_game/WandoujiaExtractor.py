@@ -2,9 +2,10 @@
 
 from bs4 import BeautifulSoup
 
-cates = ['xiuxianyizhi', 'dongzuosheji', \
-        'tiyujingji', 'jingyingyangcheng', 'juesebanyan', \
-        'saichejingsu', 'monifuzhu', 'qipaizhuoyou']
+cates = ['xiuxianshijian', 'paokujingsu', 'dongzuosheji',   \
+         'pukeqipai', 'tiyugedou', 'juesebanyan',           \
+         'baoshixiaochu', 'wangluoyouxi', 'ertongyizhi',    \
+         'tafangshouwei', 'jingyingcelue']
 
 def extract(page, cate, bias):
     appRank = [] 

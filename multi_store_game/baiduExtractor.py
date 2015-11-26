@@ -18,7 +18,7 @@ def extract(page, cate, bias):
         searchUpdate(soup, 'must', 'home_must', appRank, bias)
         # hot apps
         searchUpdate(soup, 'sec-hot', 'home_hot', appRank, bias)
-        # hot apps
+        # category reccomendation apps
         searchUpdate(soup, 'sec-caterec', 'home_caterec', appRank, bias)
     elif cate in cates:
         searchUpdate(soup, 'list-bd app-bd', cate, appRank, bias)
@@ -54,6 +54,9 @@ def getNameList(items, cate):
 
         
 def searchUpdate(soup, classname, cate, appRank, bias):
-    items = soup(class_=classname)[0]('li')
+    if classname == 'sec-hot':
+        items = soup(class_=classname)[1]('li')
+    else:
+        items = soup(class_=classname)[0]('li')
     names, pkgs = getNameList(items, cate) 
     updateAppRank(names, pkgs, appRank, cate, bias)
