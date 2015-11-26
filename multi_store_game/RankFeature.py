@@ -6,12 +6,13 @@ import glob
 import BaiduExtractor
 
 rankDB = {}
-storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',\
-                'tiyujingji', 'jingyingyangcheng', 'juesebanyan', \
+storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        \
+                'tiyujingji', 'jingyingyangcheng', 'juesebanyan',           \
                 'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
-             'wandoujia': ['allranking', 'xiuxianshijian', 'paokujingsu', 'dongzuosheji', 'pukeqipai',
-                                'tiyugedou', 'juesebanyan', 'baoshixiaochu', 'wangluoyouxi', 'ertongyizhi',
-                                'tafangshouwei', 'jingyingcelue'],
+             'wandoujia': ['allranking'], #'xiuxianshijian', 'paokujingsu'],  \
+                #'dongzuosheji', 'pukeqipai', 'tiyugedou', \
+                #'juesebanyan', 'baoshixiaochu', 'wangluoyouxi', \
+                #'ertongyizhi', 'tafangshouwei', 'jingyingcelue'],
              'xiaomi': ['allranking', 'zhanzhengcelue', 'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG',
                                 'qipaizhuoyou', 'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi', 'feixingkongzhan',
                                 'paokuchuangguan', 'tafangmigong', 'monijingying'],
@@ -22,7 +23,7 @@ storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',\
 
 
 def getRankFeature(date):
-    storeList = ['baidu'] #, 'wandoujia', 'xiaomi', 'yingyongbao', 'zhushou360']
+    storeList = ['baidu']#, 'wandoujia'] #, 'xiaomi', 'yingyongbao', 'zhushou360']
     for store in storeList:
         queryThisStore(store, date)
 
@@ -85,11 +86,14 @@ def updateRankDB(appRank, store):
     f = open('text', 'w')
     for app in rankDB:
         scr = rankDB[app]
+        outline = app 
         for store in scr:
             cr = scr[store]
+            outline += '|' + store + ' '
             for cate in cr:
                 rank = cr[cate]
-                print >> f, app, '|', store, '|', cate, '|', rank
+                outline += '%s:%s ' % (cate, rank)
+        print >> f, outline
 
 
 if __name__ == '__main__':
