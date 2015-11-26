@@ -3,18 +3,19 @@
 import re
 import glob
 
-import baiduExtractor
+import BaiduExtractor
 
 rankDB = {}
-storeCates= {'baidu':          ['allranking'], #'xiuxianyizhi', 'dongzuosheji', 'tiyujingji', 'jingyingyangcheng',
-                                #'juesebanyan', 'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
-             'wandoujia':      ['allranking', 'xiuxianshijian', 'paokujingsu', 'dongzuosheji', 'pukeqipai',
+storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',\
+                'tiyujingji', 'jingyingyangcheng', 'juesebanyan', \
+                'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
+             'wandoujia': ['allranking', 'xiuxianshijian', 'paokujingsu', 'dongzuosheji', 'pukeqipai',
                                 'tiyugedou', 'juesebanyan', 'baoshixiaochu', 'wangluoyouxi', 'ertongyizhi',
                                 'tafangshouwei', 'jingyingcelue'],
-             'xiaomi':         ['allranking', 'zhanzhengcelue', 'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG',
+             'xiaomi': ['allranking', 'zhanzhengcelue', 'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG',
                                 'qipaizhuoyou', 'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi', 'feixingkongzhan',
                                 'paokuchuangguan', 'tafangmigong', 'monijingying'],
-             'yingyongbao':    ['allranking', 'xiuxianyizhi', 'wangluoyouxi', 'dongzuomaoxian', 'qipaizhongxin',
+             'yingyongbao': ['allranking', 'xiuxianyizhi', 'wangluoyouxi', 'dongzuomaoxian', 'qipaizhongxin',
                                 'feixingsheji', 'jingyingcelue', 'juesebanyan', 'tiyujingsu'],
              'zhushou360Cats': ['allranking', 'juesebanyan', 'xiuxianyizhi', 'dongzuomaoxian', 'wangluoyouxi',
                                 'tiyujingsu', 'feixingsheji','jingyingcelue','qipaitiandi', 'ertongyouxi']}
@@ -28,18 +29,18 @@ def getRankFeature(date):
 
 def queryThisStore(store, date):
     if store == 'baidu':
-        extract = baiduExtractor.extract
+        extract = BaiduExtractor.extract
     elif store == 'wandoujia':
-        #extract = wandoujiaExtractor.extract
+        #extract = WandoujiaExtractor.extract
         pass
     elif store == 'xiaomi':
-        #extract = xiaomiExtractor.extract
+        #extract = XiaomiExtractor.extract
         pass
-    elif store == 'xiaomi':
-        #extract = yingyongbaoExtractor.extract
+    elif store == 'yingyongbao':
+        #extract = YingyongbaoExtractor.extract
         pass
-    elif store == 'xiaomi':
-        #extract = zhushou360Extractor.extract
+    elif store == 'zhushou360':
+        #extract = Zhushou360Extractor.extract
         pass
     else:
         return None
@@ -81,15 +82,16 @@ def updateRankDB(appRank, store):
             # data conflict, remain previous value
             continue
     # debug
+    f = open('text', 'w')
     for app in rankDB:
         scr = rankDB[app]
         for store in scr:
             cr = scr[store]
             for cate in cr:
                 rank = cr[cate]
-                print app, ':', store, ':', cate, ':', rank
+                print >> f, app, '|', store, '|', cate, '|', rank
 
 
 if __name__ == '__main__':
-    date = '20151120'
+    date = '20151126'
     getRankFeature(date)
