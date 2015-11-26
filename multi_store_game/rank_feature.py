@@ -2,9 +2,10 @@
 
 import re
 import glob
-from bs4 import BeautifulSoup
 
+import baiduExtractor
 
+rankDB = {}
 storeCates= {'baidu':          ['allranking'], #'xiuxianyizhi', 'dongzuosheji', 'tiyujingji', 'jingyingyangcheng',
                                 #'juesebanyan', 'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
              'wandoujia':      ['allranking', 'xiuxianshijian', 'paokujingsu', 'dongzuosheji', 'pukeqipai',
@@ -19,40 +20,74 @@ storeCates= {'baidu':          ['allranking'], #'xiuxianyizhi', 'dongzuosheji', 
                                 'tiyujingsu', 'feixingsheji','jingyingcelue','qipaitiandi', 'ertongyouxi']}
 
 
-def queryThisStore(store, date):
-    htmlPath = '/home/zzhou/crawler/multi_store_game/%s/html' % store
-    if store not in storeCates:
-        return Null
-    cateList = storeCates[store]
-    for cate in cateList:
-        fList = glob.glob('%s/%s_*_%s*' % (htmlPath, cate, date))
-        print cate, fList
-        for bias,fn in enumerate(fList):
-            with open(fn) as f:
-                page = f.read()
-                if store == 'baidu':
-                    print store, date, cate, bias, fn
-                    #baiduExtracter.extract(page, cate, bias)
-                elif store == 'wandoujia':
-                    #wandoujiaExtracter.extract(page, cate, bias)
-                    pass
-                elif store == 'xiaomi':
-                    #xiaomiExtracter.extract(page, cate, bias)
-                    pass
-                elif store == 'xiaomi':
-                    #yingyongbaoExtracter.extract(page, cate, bias)
-                    pass
-                elif store == 'xiaomi':
-                    #zhushou360Extracter.extract(page, cate, bias)
-                    pass
-                else:
-                    pass
-    
-
 def getRankFeature(date):
     storeList = ['baidu'] #, 'wandoujia', 'xiaomi', 'yingyongbao', 'zhushou360']
     for store in storeList:
         queryThisStore(store, date)
+
+
+def queryThisStore(store, date):
+    if store == 'baidu':
+        extract = baiduExtractor.extract
+    elif store == 'wandoujia':
+        #extract = wandoujiaExtractor.extract
+        pass
+    elif store == 'xiaomi':
+        #extract = xiaomiExtractor.extract
+        pass
+    elif store == 'xiaomi':
+        #extract = yingyongbaoExtractor.extract
+        pass
+    elif store == 'xiaomi':
+        #extract = zhushou360Extractor.extract
+        pass
+    else:
+        return None
+    #htmlPath = '/home/zzhou/crawler/multi_store_game/%s/html' % store
+    htmlPath = '%s/html' % store
+    if store not in storeCates:
+        return None
+    cateList = storeCates[store]
+    # query app-rank dict
+    # for each category (and each webpage of a category)
+    for cate in cateList:
+        fList = glob.glob('%s/%s*%s*' % (htmlPath, cate, date))
+        bias = 0
+        for fn in fList:
+            with open(fn) as f:
+                page = f.read()
+                bias, appRank = extract(page, cate, bias)
+                updateRankDB(appRank, store)
+
+
+def updateRankDB(appRank, store):
+    # appRank format: [app, cate, rank]
+    # rankDB format: {app: {store: {cate: rank}}}
+    for item in appRank:
+        app  = item[0]
+        cate = item[1]
+        rank = item[2]
+        if app not in rankDB:
+            # w/o app
+            rankDB[app] = {store: {cate: rank}}
+        elif store not in rankDB[app]:
+            # w/ app, w/o store
+            rankDB[app][store] = {cate: rank}
+        elif cate not in rankDB[app][store]:
+            # w/ app and store, w/o cate
+            rankDB[app][store][cate] = rank
+        else:
+            # w/ app and store and cate
+            # data conflict, remain previous value
+            continue
+    # debug
+    for app in rankDB:
+        scr = rankDB[app]
+        for store in scr:
+            cr = scr[store]
+            for cate in cr:
+                rank = cr[cate]
+                print app, ':', store, ':', cate, ':', rank
 
 
 if __name__ == '__main__':
