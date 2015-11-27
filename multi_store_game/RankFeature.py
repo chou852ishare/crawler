@@ -10,10 +10,10 @@ rankDB = {}
 storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        \
                 'tiyujingji', 'jingyingyangcheng', 'juesebanyan',           \
                 'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
-             'wandoujia': ['allranking'], #'xiuxianshijian', 'paokujingsu'],  \
-                #'dongzuosheji', 'pukeqipai', 'tiyugedou', \
-                #'juesebanyan', 'baoshixiaochu', 'wangluoyouxi', \
-                #'ertongyizhi', 'tafangshouwei', 'jingyingcelue'],
+             'wandoujia': ['allranking', 'xiuxianshijian', 'paokujingsu',   \
+                'dongzuosheji', 'pukeqipai', 'tiyugedou',                   \
+                'juesebanyan', 'baoshixiaochu', 'wangluoyouxi',             \
+                'ertongyizhi', 'tafangshouwei', 'jingyingcelue'],
              'xiaomi': ['allranking', 'zhanzhengcelue', 'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG',
                                 'qipaizhuoyou', 'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi', 'feixingkongzhan',
                                 'paokuchuangguan', 'tafangmigong', 'monijingying'],

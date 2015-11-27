@@ -13,13 +13,14 @@ def extract(page, cate, bias):
     if cate == 'allranking':
         searchUpdate(soup, 'j-top-list', 'home', appRank, bias)
     elif cate in cates:
-        searchUpdate(soup, 'list-bd app-bd', cate, appRank, bias)
+        searchUpdate(soup, 'j-tag-list', cate, appRank, bias)
     return bias, appRank
 
 
 def updateAppRank(names, pkgs, appRank, cate, bias):
     for i in range(len(names)):
-        key = names[i] + '_' + pkgs[i]
+        #key = names[i] + '_' + pkgs[i]
+        key = names[i]
         appRank.append([key, cate, bias+i+1])
 
 

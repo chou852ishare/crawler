@@ -28,7 +28,8 @@ def extract(page, cate, bias):
 
 def updateAppRank(names, pkgs, appRank, cate, bias):
     for i in range(len(names)):
-        key = names[i] + '_' + pkgs[i]
+        #key = names[i] + '_' + pkgs[i]
+        key = names[i]
         appRank.append([key, cate, bias+i+1])
 
 
