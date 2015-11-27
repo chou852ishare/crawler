@@ -5,18 +5,17 @@ import glob
 
 import BaiduExtractor
 import WandoujiaExtractor
+import XiaomiExtractor
 
 rankDB = {}
-storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        \
-                'tiyujingji', 'jingyingyangcheng', 'juesebanyan',           \
-                'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
-             'wandoujia': ['allranking', 'xiuxianshijian', 'paokujingsu',   \
-                'dongzuosheji', 'pukeqipai', 'tiyugedou',                   \
-                'juesebanyan', 'baoshixiaochu', 'wangluoyouxi',             \
-                'ertongyizhi', 'tafangshouwei', 'jingyingcelue'],
-             'xiaomi': ['allranking', 'zhanzhengcelue', 'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG',
-                                'qipaizhuoyou', 'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi', 'feixingkongzhan',
-                                'paokuchuangguan', 'tafangmigong', 'monijingying'],
+storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        
+                       'tiyujingji', 'jingyingyangcheng', 'juesebanyan',           
+                       'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
+             'wandoujia': ['allranking', 'xiuxianshijian', 'paokujingsu',   
+                       'dongzuosheji', 'pukeqipai', 'tiyugedou',                   
+                       'juesebanyan', 'baoshixiaochu', 'wangluoyouxi',             
+                       'ertongyizhi', 'tafangshouwei', 'jingyingcelue'],
+             'xiaomi': ['allranking', 'zhanzhengcelue'], #'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG', 'qipaizhuoyou', 'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi', 'feixingkongzhan', 'paokuchuangguan', 'tafangmigong', 'monijingying'],
              'yingyongbao': ['allranking', 'xiuxianyizhi', 'wangluoyouxi', 'dongzuomaoxian', 'qipaizhongxin',
                                 'feixingsheji', 'jingyingcelue', 'juesebanyan', 'tiyujingsu'],
              'zhushou360Cats': ['allranking', 'juesebanyan', 'xiuxianyizhi', 'dongzuomaoxian', 'wangluoyouxi',
@@ -24,7 +23,7 @@ storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        \
 
 
 def getRankFeature(date):
-    storeList = ['baidu', 'wandoujia'] #, 'xiaomi', 'yingyongbao', 'zhushou360']
+    storeList = ['baidu', 'wandoujia', 'xiaomi'] #, 'yingyongbao', 'zhushou360']
     for store in storeList:
         queryThisStore(store, date)
 
@@ -35,8 +34,7 @@ def queryThisStore(store, date):
     elif store == 'wandoujia':
         extract = WandoujiaExtractor.extract
     elif store == 'xiaomi':
-        #extract = XiaomiExtractor.extract
-        pass
+        extract = XiaomiExtractor.extract
     elif store == 'yingyongbao':
         #extract = YingyongbaoExtractor.extract
         pass
@@ -97,5 +95,5 @@ def updateRankDB(appRank, store):
 
 
 if __name__ == '__main__':
-    date = '20151126'
+    date = '20151127'
     getRankFeature(date)
