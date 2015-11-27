@@ -13,38 +13,35 @@ cates = {'juesebanyan'  :101587,
         'ertongyouxi'   :102238}
 
 def extract(page, cate, bias):
-    appRank = [] 
+    apprank = [] 
     soup = BeautifulSoup(page)
     if cate == 'allranking':
         for c in cates:
             # for home category
             if c == 'ertongyouxi': continue
-            searchUpdate(soup, 'srank', cates[c], 'home_'+c, appRank, bias)
-        
+            search_and_update(soup, 'srank', cates[c], 'home_'+c, apprank, bias)
         tops = {'topdownload': 'top_d', 'updownload': 'up_d'}
         for c in tops: 
             # for home top download and up download apps
-            searchUpdate(soup, 'rankcon', tops[c], 'home_'+c, appRank, bias)
-        
+            search_and_update(soup, 'rankcon', tops[c], 'home_'+c, apprank, bias)
         rate = {'highrate': 'pjzg'}
         for c in rate:
             # for home high rate apps
-            searchUpdate(soup, 'srank', rate[c], 'home_'+c, appRank, bias)
-    
+            search_and_update(soup, 'srank', rate[c], 'home_'+c, apprank, bias)
     elif cate in cates:
-        searchUpdate(soup, 'iconList', 'iconList', cate, appRank, bias)
-        bias = bias + len(appRank)
-    return bias, appRank
+        search_and_update(soup, 'iconList', 'iconList', cate, apprank, bias)
+        bias = bias + len(apprank)
+    return bias, apprank
 
 
-def updateAppRank(names, pkgs, appRank, cate, bias):
+def update_apprank(names, pkgs, apprank, cate, bias):
     for i in range(len(names)):
         #key = names[i] + '_' + pkgs[i]
         key = names[i]
-        appRank.append([key, cate, bias+i+1])
+        apprank.append([key, cate, bias+i+1])
 
 
-def getNameList(items, cate):
+def get_name_list(items, cate):
     if 'home' in cate:
         names = [item(class_='sname')[0].attrs['title'].encode('u8') for item in items]
         pkgs  = [item('a')[-1].attrs['href'].split('/')[-1].split('_')[-2] for item in items]
@@ -54,10 +51,10 @@ def getNameList(items, cate):
     return names, pkgs
 
         
-def searchUpdate(soup, classname, idn, cate, appRank, bias):
+def search_and_update(soup, classname, idn, cate, apprank, bias):
     if 'home' in cate:
         items = soup(class_=classname, cid=idn)[0]('li')
     else: 
         items = soup(class_=classname, id=idn)[0]('li')
-    names, pkgs = getNameList(items, cate) 
-    updateAppRank(names, pkgs, appRank, cate, bias)
+    names, pkgs = get_name_list(items, cate) 
+    update_apprank(names, pkgs, apprank, cate, bias)
