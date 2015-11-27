@@ -6,6 +6,8 @@ import glob
 import BaiduExtractor
 import WandoujiaExtractor
 import XiaomiExtractor
+import YingyongbaoExtractor
+import Zhushou360Extractor
 
 rankDB = {}
 storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        
@@ -15,15 +17,19 @@ storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',
                        'dongzuosheji', 'pukeqipai', 'tiyugedou',                   
                        'juesebanyan', 'baoshixiaochu', 'wangluoyouxi',             
                        'ertongyizhi', 'tafangshouwei', 'jingyingcelue'],
-             'xiaomi': ['allranking', 'zhanzhengcelue'], #'dongzuoqiangzhan', 'saichetiyu', 'wangyouRPG', 'qipaizhuoyou', 'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi', 'feixingkongzhan', 'paokuchuangguan', 'tafangmigong', 'monijingying'],
-             'yingyongbao': ['allranking', 'xiuxianyizhi', 'wangluoyouxi', 'dongzuomaoxian', 'qipaizhongxin',
-                                'feixingsheji', 'jingyingcelue', 'juesebanyan', 'tiyujingsu'],
-             'zhushou360Cats': ['allranking', 'juesebanyan', 'xiuxianyizhi', 'dongzuomaoxian', 'wangluoyouxi',
-                                'tiyujingsu', 'feixingsheji','jingyingcelue','qipaitiandi', 'ertongyouxi']}
+             'xiaomi': ['allranking', 'zhanzhengcelue', 'dongzuoqiangzhan', 
+                       'saichetiyu', 'wangyouRPG', 'qipaizhuoyou', 
+                       'gedoukuaida', 'ertongyizhi', 'xiuxianchuangyi',
+                       'feixingkongzhan', 'paokuchuangguan', 'tafangmigong', 
+                       'monijingying'],
+             'yingyongbao': ['allranking', 'xiuxianyizhi', 'wangluoyouxi', 
+                       'dongzuomaoxian', 'qipaizhongxin', 'feixingsheji', 
+                       'jingyingcelue', 'juesebanyan', 'tiyujingsu'],
+             'zhushou360': ['allranking'], #'juesebanyan', 'xiuxianyizhi', 'dongzuomaoxian', 'wangluoyouxi', 'tiyujingsu', 'feixingsheji','jingyingcelue','qipaitiandi', 'ertongyouxi']}
 
 
 def getRankFeature(date):
-    storeList = ['baidu', 'wandoujia', 'xiaomi'] #, 'yingyongbao', 'zhushou360']
+    storeList = ['baidu', 'wandoujia', 'xiaomi', 'yingyongbao', 'zhushou360']
     for store in storeList:
         queryThisStore(store, date)
 
@@ -36,11 +42,9 @@ def queryThisStore(store, date):
     elif store == 'xiaomi':
         extract = XiaomiExtractor.extract
     elif store == 'yingyongbao':
-        #extract = YingyongbaoExtractor.extract
-        pass
+        extract = YingyongbaoExtractor.extract
     elif store == 'zhushou360':
-        #extract = Zhushou360Extractor.extract
-        pass
+        extract = Zhushou360Extractor.extract
     else:
         return None
     #htmlPath = '/home/zzhou/crawler/multi_store_game/%s/html' % store
@@ -52,12 +56,19 @@ def queryThisStore(store, date):
     # for each category (and each webpage of a category)
     for cate in cateList:
         fList = glob.glob('%s/%s*%s*' % (htmlPath, cate, date))
+        sortByPage(fList, store)
         bias = 0
         for fn in fList:
             with open(fn) as f:
                 page = f.read()
                 bias, appRank = extract(page, cate, bias)
                 updateRankDB(appRank, store)
+
+
+def sortByPage(fList, store):
+    cmpByPage = lambda x,y: cmp(int(x.split('_')[1]), int(y.split('_')[1]))
+    if store in ['baidu', 'xiaomi', 'zhushou360']:
+        fList.sort(cmp=cmpByPage)
 
 
 def updateRankDB(appRank, store):

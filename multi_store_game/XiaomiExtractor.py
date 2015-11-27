@@ -14,6 +14,9 @@ def extract(page, cate, bias):
         searchUpdate(soup, 'applist', 'home', appRank, bias)
     elif cate in cates:
         searchUpdate(soup, 'applist', cate, appRank, bias)
+        if bias == 0:
+            # substract length of category hot applist
+            bias -= len(soup(class_='applist')[0]('li'))
         bias = bias + len(appRank)
     return bias, appRank
 
