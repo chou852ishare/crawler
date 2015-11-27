@@ -4,6 +4,7 @@ import re
 import glob
 
 import BaiduExtractor
+import WandoujiaExtractor
 
 rankDB = {}
 storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        \
