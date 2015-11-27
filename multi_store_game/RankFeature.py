@@ -25,13 +25,11 @@ storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',
              'yingyongbao': ['allranking', 'xiuxianyizhi', 'wangluoyouxi', 
                        'dongzuomaoxian', 'qipaizhongxin', 'feixingsheji', 
                        'jingyingcelue', 'juesebanyan', 'tiyujingsu'],
-             'zhushou360': ['allranking'], #'juesebanyan', 'xiuxianyizhi', 'dongzuomaoxian', 'wangluoyouxi', 'tiyujingsu', 'feixingsheji','jingyingcelue','qipaitiandi', 'ertongyouxi']}
-
-
-def getRankFeature(date):
-    storeList = ['baidu', 'wandoujia', 'xiaomi', 'yingyongbao', 'zhushou360']
-    for store in storeList:
-        queryThisStore(store, date)
+             'zhushou360': ['allranking', 'juesebanyan', 'xiuxianyizhi', 
+                       'dongzuomaoxian', 'wangluoyouxi', 'tiyujingsu', 
+                       'feixingsheji','jingyingcelue','qipaitiandi', 
+                       'ertongyouxi']
+             }
 
 
 def queryThisStore(store, date):
@@ -91,8 +89,10 @@ def updateRankDB(appRank, store):
             # w/ app and store and cate
             # data conflict, remain previous value
             continue
-    # debug
-    f = open('text', 'w')
+    
+    
+def writeResult(filename):
+    f = open(filename, 'w')
     for app in rankDB:
         scr = rankDB[app]
         outline = app 
@@ -103,6 +103,12 @@ def updateRankDB(appRank, store):
                 rank = cr[cate]
                 outline += '%s:%s ' % (cate, rank)
         print >> f, outline
+
+
+def getRankFeature(date):
+    for store in storeCates:
+        queryThisStore(store, date)
+    writeResult('result')
 
 
 if __name__ == '__main__':

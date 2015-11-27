@@ -2,35 +2,37 @@
 
 from bs4 import BeautifulSoup
 
-cates = ['juesebanyan', 'xiuxianyizhi', 'dongzuomaoxian', 
-         'wangluoyouxi', 'tiyujingsu', 'feixingsheji',
-         'jingyingcelue','qipaitiandi', 'ertongyouxi']
-    cate = {101587: 'juesebanyan',
-            19:     'xiuxianyizhi',
-            20:     'dongzuomaoxian',
-            100451: 'wangluoyouxi',
-            51:     'tiyujingsu',
-            52:     'feixingsheji',
-            53:     'jingyingcelue',
-            54:     'qipaitiandi',
-            102238: 'ertongyouxi'}
+cates = {'juesebanyan'  :101587, 
+        'xiuxianyizhi'  :19,     
+        'dongzuomaoxian':20,     
+        'wangluoyouxi'  :100451, 
+        'tiyujingsu'    :51,     
+        'feixingsheji'  :52,     
+        'jingyingcelue' :53,     
+        'qipaitiandi'   :54,     
+        'ertongyouxi'   :102238}
 
 def extract(page, cate, bias):
     appRank = [] 
     soup = BeautifulSoup(page)
     if cate == 'allranking':
-        # home juesebanyan
-        searchUpdate(soup, '19', 'home_juesebanyan', appRank, bias)
-        # home xiuxianyizhi
-        searchUpdate(soup, 'sec-hot tophot', 'home_tophot', appRank, bias)
-        # must have apps
-        searchUpdate(soup, 'must', 'home_must', appRank, bias)
-        # hot apps
-        searchUpdate(soup, 'sec-hot', 'home_hot', appRank, bias)
-        # category reccomendation apps
-        searchUpdate(soup, 'sec-caterec', 'home_caterec', appRank, bias)
+        for c in cates:
+            # for home category
+            if c == 'ertongyouxi': continue
+            searchUpdate(soup, 'srank', cates[c], 'home_'+c, appRank, bias)
+        
+        tops = {'topdownload': 'top_d', 'updownload': 'up_d'}
+        for c in tops: 
+            # for home top download and up download apps
+            searchUpdate(soup, 'rankcon', tops[c], 'home_'+c, appRank, bias)
+        
+        rate = {'highrate': 'pjzg'}
+        for c in rate:
+            # for home high rate apps
+            searchUpdate(soup, 'srank', rate[c], 'home_'+c, appRank, bias)
+    
     elif cate in cates:
-        searchUpdate(soup, 'list-bd app-bd', cate, appRank, bias)
+        searchUpdate(soup, 'iconList', 'iconList', cate, appRank, bias)
         bias = bias + len(appRank)
     return bias, appRank
 
@@ -43,30 +45,19 @@ def updateAppRank(names, pkgs, appRank, cate, bias):
 
 
 def getNameList(items, cate):
-    if cate in ['home_must'] or cate in cates:
-        names = [item(class_='name')[0].text.encode('u8') for item in items]
-        pkgs  = [item(class_='inst-btn inst-btn-small quickdown')[0].attrs['data_package'] \
-                for item in items]
-    elif cate in ['home_caterec']:
-        names = [item(class_='name')[0].text.encode('u8') \
-                for item in items \
-                    if not (item.parent.has_attr('class') \
-                       and item.parent['class'][0] == 'cate-name')]
-        pkgs  = [item(class_='inst-btn inst-btn-small quickdown')[0].attrs['data_package'] 
-                for item in items \
-                    if not (item.parent.has_attr('class') 
-                       and item.parent['class'][0] == 'cate-name')]
+    if 'home' in cate:
+        names = [item(class_='sname')[0].attrs['title'].encode('u8') for item in items]
+        pkgs  = [item('a')[-1].attrs['href'].split('/')[-1].split('_')[-2] for item in items]
     else:
-        names = [item(class_='name')[0].text.encode('u8') for item in items]
-        pkgs  = [item(class_='inst-btn-big quickdown')[0].attrs['data_package'] \
-                for item in items]
+        names = [item('h3')[0].text.encode('u8') for item in items]
+        pkgs  = [item('a')[-1].attrs['href'].split('/')[-1] for item in items]
     return names, pkgs
 
         
-def searchUpdate(soup, classname, cate, appRank, bias):
-    if classname == 'sec-hot':
-        items = soup(class_=classname)[1]('li')
-    else:
-        items = soup(class_=classname)[0]('li')
+def searchUpdate(soup, classname, idn, cate, appRank, bias):
+    if 'home' in cate:
+        items = soup(class_=classname, cid=idn)[0]('li')
+    else: 
+        items = soup(class_=classname, id=idn)[0]('li')
     names, pkgs = getNameList(items, cate) 
     updateAppRank(names, pkgs, appRank, cate, bias)
