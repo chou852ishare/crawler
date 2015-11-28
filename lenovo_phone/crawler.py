@@ -23,7 +23,7 @@ def crawl_page(page):
         pars = [item('a')[1]['href'] for item in itms]
         for purl in pars:
             psoup = get_soup(purl)
-            fname = (output+'lenovo_').encode('u8') + psoup(class_='clearfix modle_title')[0]('h1')[0].text.encode('u8')
+            fname = (output+'lenovo_') + psoup(class_='clearfix modle_title')[0]('h1')[0].text.encode('u8')
             print >> open(fname, 'w'), psoup
     except Exception, e:
         print traceback.print_exc()
