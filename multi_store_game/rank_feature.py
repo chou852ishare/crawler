@@ -1,16 +1,17 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import re
 import glob
 
-import BaiduExtractor
-import WandoujiaExtractor
-import XiaomiExtractor
-import YingyongbaoExtractor
-import Zhushou360Extractor
+import baidu_extractor
+import wandoujia_extractor
+import xiaomi_extractor
+import yingyongbao_extractor
+import zhushou360_extractor
 
 rankDB = {}
-storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        
+storecates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',        
                        'tiyujingji', 'jingyingyangcheng', 'juesebanyan',           
                        'saichejingsu', 'monifuzhu', 'qipaizhuoyou'],
              'wandoujia': ['allranking', 'xiuxianshijian', 'paokujingsu',   
@@ -28,51 +29,50 @@ storeCates= {'baidu': ['allranking', 'xiuxianyizhi', 'dongzuosheji',
              'zhushou360': ['allranking', 'juesebanyan', 'xiuxianyizhi', 
                        'dongzuomaoxian', 'wangluoyouxi', 'tiyujingsu', 
                        'feixingsheji','jingyingcelue','qipaitiandi', 
-                       'ertongyouxi']
-             }
+                       'ertongyouxi']}
 
 
-def queryThisStore(store, date):
+def query_this_store(store, date):
     if store == 'baidu':
-        extract = BaiduExtractor.extract
+        extract = baidu_extractor.extract
     elif store == 'wandoujia':
-        extract = WandoujiaExtractor.extract
+        extract = wandoujia_extractor.extract
     elif store == 'xiaomi':
-        extract = XiaomiExtractor.extract
+        extract = xiaomi_extractor.extract
     elif store == 'yingyongbao':
-        extract = YingyongbaoExtractor.extract
+        extract = yingyongbao_extractor.extract
     elif store == 'zhushou360':
-        extract = Zhushou360Extractor.extract
+        extract = zhushou360_extractor.extract
     else:
         return None
-    #htmlPath = '/home/zzhou/crawler/multi_store_game/%s/html' % store
-    htmlPath = '%s/html' % store
-    if store not in storeCates:
+    #htmlpath = '/home/zzhou/crawler/multi_store_game/%s/html' % store
+    htmlpath = '%s/html' % store
+    if store not in storecates:
         return None
-    cateList = storeCates[store]
+    catelist = storecates[store]
     # query app-rank dict
     # for each category (and each webpage of a category)
-    for cate in cateList:
-        fList = glob.glob('%s/%s*%s*' % (htmlPath, cate, date))
-        sortByPage(fList, store)
+    for cate in catelist:
+        fnlist = glob.glob('%s/%s*%s*' % (htmlpath, cate, date))
+        sort_by_page(fnlist, store)
         bias = 0
-        for fn in fList:
+        for fn in fnlist:
             with open(fn) as f:
                 page = f.read()
-                bias, appRank = extract(page, cate, bias)
-                updateRankDB(appRank, store)
+                bias, apprank = extract(page, cate, bias)
+                update_rankDB(apprank, store)
 
 
-def sortByPage(fList, store):
-    cmpByPage = lambda x,y: cmp(int(x.split('_')[1]), int(y.split('_')[1]))
+def sort_by_page(fnlist, store):
+    cmp_by_page = lambda x,y: cmp(int(x.split('_')[1]), int(y.split('_')[1]))
     if store in ['baidu', 'xiaomi', 'zhushou360']:
-        fList.sort(cmp=cmpByPage)
+        fnlist.sort(cmp=cmp_by_page)
 
 
-def updateRankDB(appRank, store):
-    # appRank format: [app, cate, rank]
+def update_rankDB(apprank, store):
+    # apprank format: [app, cate, rank]
     # rankDB format: {app: {store: {cate: rank}}}
-    for item in appRank:
+    for item in apprank:
         app  = item[0]
         cate = item[1]
         rank = item[2]
@@ -91,7 +91,7 @@ def updateRankDB(appRank, store):
             continue
     
     
-def writeResult(filename):
+def write_result(filename):
     f = open(filename, 'w')
     for app in rankDB:
         scr = rankDB[app]
@@ -105,12 +105,12 @@ def writeResult(filename):
         print >> f, outline
 
 
-def getRankFeature(date):
-    for store in storeCates:
-        queryThisStore(store, date)
-    writeResult('result')
+def get_features(date):
+    for store in storecates:
+        query_this_store(store, date)
+    write_result('result')
 
 
 if __name__ == '__main__':
     date = '20151127'
-    getRankFeature(date)
+    get_features(date)

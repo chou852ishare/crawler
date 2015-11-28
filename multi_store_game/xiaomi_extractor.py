@@ -8,42 +8,42 @@ cates = ['zhanzhengcelue', 'dongzuoqiangzhan', 'saichetiyu',
          'paokuchuangguan', 'tafangmigong', 'monijingying']
 
 def extract(page, cate, bias):
-    appRank = [] 
+    apprank = [] 
     soup = BeautifulSoup(page)
     if cate == 'allranking':
-        searchUpdate(soup, 'applist', 'home', appRank, bias)
+        search_and_update(soup, 'applist', 'home', apprank, bias)
     elif cate in cates:
-        searchUpdate(soup, 'applist', cate, appRank, bias)
+        search_and_update(soup, 'applist', cate, apprank, bias)
         if bias == 0:
             # substract length of category hot applist
             bias -= len(soup(class_='applist')[0]('li'))
-        bias = bias + len(appRank)
-    return bias, appRank
+        bias = bias + len(apprank)
+    return bias, apprank
 
 
-def updateAppRank(names, appRank, cate, bias):
+def update_apprank(names, apprank, cate, bias):
     for i in range(len(names)):
         key = names[i]
-        appRank.append([key, cate, bias+i+1])
+        apprank.append([key, cate, bias+i+1])
 
 
-def getNameList(items):
+def get_name_list(items):
     names = [item('h5')[0].text.encode('u8') for item in items]
     return names
 
         
-def searchUpdate(soup, classname, cate, appRank, bias):
+def search_and_update(soup, classname, cate, apprank, bias):
     if cate == 'home':
         items = soup(class_=classname)[0]('li')
-        names = getNameList(items) 
-        updateAppRank(names, appRank, cate, bias)
+        names = get_name_list(items) 
+        update_apprank(names, apprank, cate, bias)
     else:
+        # for category hot applist
         if bias == 0:
-            # for category hot applist
             items = soup(class_=classname)[0]('li')
-            names = getNameList(items) 
-            updateAppRank(names, appRank, cate+'_hot', bias)
+            names = get_name_list(items) 
+            update_apprank(names, apprank, cate+'_hot', bias)
         # for category all applist
         items = soup(class_=classname)[1]('li')
-        names = getNameList(items) 
-        updateAppRank(names, appRank, cate, bias)
+        names = get_name_list(items) 
+        update_apprank(names, apprank, cate, bias)
