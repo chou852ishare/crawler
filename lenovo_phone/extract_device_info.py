@@ -6,6 +6,7 @@ import traceback
 from bs4 import BeautifulSoup
 
 outpath = './output/*'
+outfile = './lenovo_phone_info'
 info = {}
 keys = ['参考价格', '商家报价', '上市时间', 'CPU型号', '屏幕尺寸', '运行内存', '屏幕分辨率',
         '机身容量', '操作系统', '后置相机', '前置相机', '外观设计', 
@@ -185,10 +186,10 @@ def get_info(filename):
         for li in nickname('li')[1:]:
             value += demess(li.text.encode('u8')) + ','
         info['网友还叫它'] = value
-        print '|'.join(info.keys())
-        print '|'.join(info.values())
     except:
         info['网友还叫它'] = ''
+    # write all info to output file
+    write_info(model)
     # reset info to empty
     reset_info()
 
@@ -208,12 +209,17 @@ def findcanshu(canshulist, idname):
     return None
 
 
+def write_info(model):
+    f = open(outfile, 'a')
+    print >> f, model + '|' + '|'.join([info.get(key, '') for key in keys])
+    f.close()
+    
+
 def run():
+    with open(outfile, 'w') as f:
+        print >> f, 'model|' + '|'.join(keys)
     files = glob.glob(outpath)
-    i=0
-    for fn in files[:10]:
-        i+=1
-        print i
+    for fn in files:
         get_info(fn)
 
 
