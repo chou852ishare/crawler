@@ -4,6 +4,7 @@
 import urllib2
 import traceback
 from bs4 import BeautifulSoup
+from selenium import webdriver
 
 prefix = 'http://product.cnmo.com/pro_sub_manu/sub_57_manu_1763_1_%s.shtml'
 output = './output/'
