@@ -1,17 +1,17 @@
 #!/bin/bash
 
-cd /home/ziye/Documents/crawler/multi_store_game/baidu
+cd /home/zzhou/crawler/multi_store_game/baidu
 python crawler_baidugame.py
 
-cd /home/ziye/Documents/crawler/multi_store_game/wandoujia
+cd /home/zzhou/crawler/multi_store_game/wandoujia
 python crawler_wandoujia.py
 
-cd /home/ziye/Documents/crawler/multi_store_game/xiaomi
+cd /home/zzhou/crawler/multi_store_game/xiaomi
 python crawler_xiaomi.py
 
-cd /home/ziye/Documents/crawler/multi_store_game/yingyongbao
+cd /home/zzhou/crawler/multi_store_game/yingyongbao
 python crawler_yingyongbao.py
 
-cd /home/ziye/Documents/crawler/multi_store_game/zhushou360
+cd /home/zzhou/crawler/multi_store_game/zhushou360
 python crawler_360game.py
 
