@@ -191,11 +191,7 @@ def get_info(filename):
     # write all info to output file
     write_info(model)
     # reset info to empty
-    reset_info()
-
-
-def reset_info():
-    info = {}
+    info.clear()
 
 
 def demess(s):
