@@ -199,7 +199,7 @@ def reset_info():
 
 
 def demess(s):
-    return s.strip().replace('：', '').replace('\n', '')
+    return s.strip().replace('：', '').replace('\n', '').replace('|', '#')
 
 
 def findcanshu(canshulist, idname):
