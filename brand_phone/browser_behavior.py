@@ -1,18 +1,24 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# _*_ coding: utf-8 -*-
 
 __author__ = 'ziye'
 
 from bs4 import BeautifulSoup
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoAlertPresentException
+# from selenium.common.exceptions import
 import os
 
 # set work directory
 # os.chdir('./output/test/')
+
+# set virtual display
+# display = Display(visible=0, size=(800, 600))
+# display.start()
 
 # open the browser
 browser = webdriver.Firefox()
@@ -178,3 +184,4 @@ with open('./phone_brand', 'r') as rf:
         print phone
         crawler(phone[0], phone[1], './output/test/phone_info')
 browser.quit()
+# display.stop()

@@ -35,5 +35,6 @@ def main():
     for page in range(1,15):
         crawl_page(page)
 
+
 if __name__ == '__main__':
     main()
