@@ -27,7 +27,8 @@ def crawl_page(page):
             fname = (output+'lenovo_') + psoup(class_='clearfix modle_title')[0]('h1')[0].text.encode('u8')
             print >> open(fname, 'w'), psoup
     except Exception, e:
-        print traceback.print_exc()
+        print fname
+        #traceback.print_exc()
 
 
 def main():
