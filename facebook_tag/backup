@@ -1,0 +1,15 @@
+tag = {}
+def find_childrenli(parentli, key, tag):
+    if not parentli('ul'):
+        print key, tag.get(key, [])
+        tag[key] = tag.get(key, {})[parentli.text.strip()] = {}
+        return
+    elif parentli('strong'):
+        subkey = parentli('strong')[0].text.strip()
+    else:
+        subkey = str(parentli).split('<ul>')[0].strip().replace('<li>','')
+    li1 = parentli('ul')[0]('li')[0]
+    tag[key] = {}
+    find_childrenli(li1, subkey, tag[key])
+    for li in li1.findNextSiblings():
+        find_childrenli(li, subkey, tag[key])
