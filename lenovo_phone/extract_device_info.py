@@ -50,6 +50,12 @@ def get_info(filename):
             lines = li.text.encode('u8').split('：')
             tagnm = demess(lines[0])
             value = demess(lines[1])
+            if tagnm == '上市时间' and int(value.split('年')[0]) < 2012:
+                info.clear()
+                return
+            if tagnm == '屏幕尺寸' and float(value.split('英寸')[0]) < 3:
+                info.clear()
+                return
             info[tagnm] = value
     except:
         info['上市时间'] = ''

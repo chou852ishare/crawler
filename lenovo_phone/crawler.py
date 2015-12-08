@@ -22,13 +22,14 @@ def crawl_page(page):
         soup = get_soup(url)
         itms = soup(class_='btn', id='comparePicList')
         pars = [item('a')[1]['href'] for item in itms]
-        for purl in pars:
+        for k,purl in enumerate(pars):
+            print page, k, purl
             psoup = get_soup(purl)
-            fname = (output+'lenovo_') + psoup(class_='clearfix modle_title')[0]('h1')[0].text.encode('u8')
+            fname = output + ('lenovo_%s_%s' % (page, k)) + psoup(class_='clearfix modle_title')[0]('h1')[0].text.encode('u8')
             print >> open(fname, 'w'), psoup
     except Exception, e:
         print fname
-        #traceback.print_exc()
+        traceback.print_exc()
 
 
 def main():
